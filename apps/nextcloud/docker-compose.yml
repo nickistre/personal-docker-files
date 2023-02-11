@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+    networks:
+      - net
+
+  nextcloud:
+    image: nextcloud:apache
+    restart: always
+    volumes:
+      - ${NEXTCLOUD_HTML_DIR}:/var/www/html
+      - ${NEXTCLOUD_DATA_DIR}:/var/www/html/data
+      - ${NEXTCLOUD_BACKUP_DIR}:/var/www/html/backup
+    environment:
+      - POSTGRES_HOST
+      - POSTGRES_DB=${NEXTCLOUD_POSTGRES_DB}
+      - POSTGRES_USER=${NEXTCLOUD_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${NEXTCLOUD_POSTGRES_PASSWORD}
+      - NEXTCLOUD_ADMIN_USER
+      - NEXTCLOUD_ADMIN_PASSWORD
+      - NEXTCLOUD_TRUSTED_DOMAINS
+      - REDIS_HOST=redis
+      - SMTP_HOST=${EMAIL_RELAY_HOST}
+      - SMTP_AUTHTYPE=PLAIN
+      - MAIL_FROM_ADDRESS=${NEXTCLOUD_MAIL_FROM_ADDRESS}
+      - MAIL_DOMAIN=${NEXTCLOUD_MAIL_DOMAIN}
+      - PHP_MEMORY_LIMIT=${NEXTCLOUD_PHP_MEMORY_LIMIT}
+      - PHP_UPLOAD_LIMIT=${NEXTCLOUD_PHP_UPLOAD_LIMIT}
+      - TRUSTED_PROXIES=${NEXTCLOUD_TRUSTED_PROXIES}
+    networks:
+      - net
+      - postgresql-net
+      - nginx-proxy-net
+      - email-relay-net
+
+  cron:
+    image: nextcloud:apache
+    restart: always
+    volumes_from:
+      - nextcloud
+    entrypoint: /cron.sh
+    networks:
+      - net
+      - postgresql-net
+      - email-relay-net
+
+
+networks:
+  net:
+  postgresql-net:
+    external: true
+    name: "${POSTGRES_NETWORK}"
+  nginx-proxy-net:
+    external: true
+    name: "${REVERSE_PROXY_NETWORK}"
+  email-relay-net:
+    external: true
+    name: "${EMAIL_RELAY_NETWORK}"

@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+    mariadb:
+        image: mariadb:10
+        environment:
+            - MARIADB_AUTO_UPGRADE=1
+            - TZ
+            - MARIADB_ROOT_PASSWORD
+        volumes :
+            - "${MARAIDB_DATA_DIR}:/var/lib/mysql"
+        networks:
+            net:
+        restart: on-failure
+        ports:
+            - "${MARIADB_HOST_PORT}:3306"
+
+    phpmyadmin:
+        image: phpmyadmin:5
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+            - PMA_HOST=mariadb
+            - TZ
+        networks:
+            net:
+        restart: on-failure
+
+networks:
+    net:
+

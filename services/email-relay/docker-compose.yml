@@ -1,0 +1,26 @@
+version: "3.8"
+
+# Services using this should
+
+services:
+    email-relay:
+        image: loganmarchione/docker-postfixrelay:latest
+        volumes:
+            - "${EMAIL_RELAY_DATA_DIR}:/var/spool/postfix"
+        environment:
+            - TZ
+            - RELAY_HOST
+            - RELAY_PORT
+            - RELAY_USER
+            - RELAY_PASS
+            - MYORIGIN
+            - MYNETWORKS
+        networks:
+            - net
+            - external-net
+        restart: on-failure
+
+networks:
+    net:
+        internal: true
+    external-net:

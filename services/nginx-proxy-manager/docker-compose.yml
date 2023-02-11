@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+    nginx-proxy-manager:
+        image: jc21/nginx-proxy-manager:latest
+        volumes:
+            - "${NPM_DATA_DIR}:/data"
+            - "${NPM_LETSENCRYPT_DIR}:/etc/letsencrypt"
+        environment:
+            - TZ
+            - DB_MYSQL_HOST=${MARIADB_HOST}
+            - DB_MYSQL_PORT=3306
+            - DB_MYSQL_NAME=${NPM_MARIADB_NAME}
+            - DB_MYSQL_USER=${NPM_MARIADB_USER}
+            - DB_MYSQL_PASSWORD=${NPM_MARIADB_PASSWORD}
+            - DISABLE_IPV6=true
+        restart: on-failure
+        networks:
+            net:
+            mariadb-net:
+            lan:
+                ipv4_address: "${NPM_LAN_IP}"
+
+
+networks:
+    net:
+    mariadb-net:
+        external: true
+        name: "${MARIADB_NETWORK}"
+    lan:
+        external: true
+        name: "${LAN_NETWORK}"
+
+

@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+    postgresql:
+        image: postgres:15
+        volumes:
+            - "${POSTGRES_DATA_DIR}:/var/lib/postgresql/data"
+            - "${POSTGRES_WAL_DIR}:/var/lib/postgresql/pg_wal"
+        environment:
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_INITDB_WALDIR=/var/lib/postgresql/pg_wal
+        networks:
+            - net
+        restart: on-failure
+        shm_size: 256MB
+        ports:
+            - "${POSTGRES_HOST_PORT}:5432"
+
+    pgadmin:
+        image: dpage/pgadmin4:latest
+        volumes:
+            - "${PGADMIN_DATA_DIR}:/var/lib/pgadmin"
+        environment:
+            - PGADMIN_DISABLE_POSTFIX=1
+            - PGADMIN_DEFAULT_EMAIL
+            - PGADMIN_DEFAULT_PASSWORD
+            - PGADMIN_CONFIG_MAIL_SERVER='${EMAIL_RELAY_HOST}'
+        networks:
+            - net
+            - email-relay-net
+            - reverse-proxy-net
+        restart: on-failure
+
+networks:
+    net:
+    email-relay-net:
+        external: true
+        name: "${EMAIL_RELAY_NETWORK}"
+    reverse-proxy-net:
+        external: true
+        name: "${REVERSE_PROXY_NETWORK}"
