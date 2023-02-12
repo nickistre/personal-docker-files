@@ -24,6 +24,7 @@ services:
 
 networks:
     net:
+        internal: true
     mariadb-net:
         external: true
         name: "${MARIADB_NETWORK}"
