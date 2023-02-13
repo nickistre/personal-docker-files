@@ -14,8 +14,8 @@ services:
       - ${NEXTCLOUD_HTML_DIR}:/var/www/html
       - ${NEXTCLOUD_DATA_DIR}:/var/www/html/data
       - ${NEXTCLOUD_BACKUP_DIR}:/var/www/html/backup
-      - type: tmpfs
-        target: /tmp
+    tmpfs:
+      - /tmp
     environment:
       - POSTGRES_HOST
       - POSTGRES_DB=${NEXTCLOUD_POSTGRES_DB}
