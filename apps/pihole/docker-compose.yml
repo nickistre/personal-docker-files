@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+    pihole:
+        image: pihole/pihole:latest
+        restart: always
+        volumes:
+            - "${PIHOLE_ETC_PIHOLE_DIR}:/etc/pihole"
+            - "${PIHOLE_ETC_DNSMASQ_DIR}:/etc/dnsmasq.d"
+        environment:
+            - TZ
+            - WEBPASSWORD=${PIHOLE_WEBPASSWORD}
+        ports:
+            - "53:53/tcp"
+            - "53:53/udp"
+            # Only required if you are using Pi-hole as your DHCP server
+            #- "67:67/udp"
+        #cap_add:
+        #    - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+
+networks:
+    net:
