@@ -17,6 +17,14 @@ services:
             #- "67:67/udp"
         #cap_add:
         #    - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+        networks:
+            net:
+            lan:
+                ipv4_address: "${PIHOLE_LAN_IP}"
 
 networks:
     net:
+    lan:
+        external: true
+        name: "${LAN_NETWORK}"
+
