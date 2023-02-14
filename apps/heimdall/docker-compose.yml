@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+    heimdall:
+        image: linuxserver/heimdall:latest
+        restart: always
+        networks:
+            - reverse-proxy
+        volumes:
+            - "${HEIMDALL_CONFIG_DIR}:/config"
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ
+        ports:
+            - "80"
+            - "443"
+
+networks:
+    reverse-proxy:
+        external: true
+        name: "${REVERSE_PROXY_NETWORK}"
