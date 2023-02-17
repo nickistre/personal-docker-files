@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: always
+    ports:
+      - "3001"
+    volumes:
+      - "${UPTIME_KUMA_DATA_DIR}:/app/data"
+
+networks:
+  reverse-proxy-net:
+    external: true
+    name: ${REVERSE_PROXY_NETWORK}
