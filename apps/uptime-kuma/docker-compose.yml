@@ -10,8 +10,16 @@ services:
       - "${UPTIME_KUMA_DATA_DIR}:/app/data"
     networks:
       - reverse-proxy-net
+      - postgres-net
+      - mariadb-net
 
 networks:
   reverse-proxy-net:
     external: true
     name: ${REVERSE_PROXY_NETWORK}
+  postgres-net:
+    external: true
+    name: ${POSTGRES_NETWORK}
+  mariadb-net:
+    external: true
+    name: ${MARIADB_NETWORK}
