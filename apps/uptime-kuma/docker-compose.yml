@@ -8,6 +8,8 @@ services:
       - "3001"
     volumes:
       - "${UPTIME_KUMA_DATA_DIR}:/app/data"
+    networks:
+      - reverse-proxy-net
 
 networks:
   reverse-proxy-net:
