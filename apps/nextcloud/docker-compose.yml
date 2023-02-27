@@ -13,7 +13,7 @@ services:
     volumes:
       - ${NEXTCLOUD_HTML_DIR}:/var/www/html
       - ${NEXTCLOUD_DATA_DIR}:/var/www/html/data
-      - ${NEXTCLOUD_BACKUP_DIR}:/var/www/html/backup
+      - ${NEXTCLOUD_BACKUP_DIR}:/var/www/backup
     tmpfs:
       - /tmp
     environment:
