@@ -51,3 +51,4 @@ networks:
   reverse-proxy:
     external: true
     name: "${REVERSE_PROXY_NETWORK}"
+  external-net:
