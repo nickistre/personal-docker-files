@@ -23,3 +23,6 @@ networks:
   mariadb-net:
     external: true
     name: ${MARIADB_NETWORK}
+  email-relay-net:
+    external: true
+    name: "${EMAIL_RELAY_NETWORK}"
