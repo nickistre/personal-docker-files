@@ -12,6 +12,7 @@ services:
       - reverse-proxy-net
       - postgres-net
       - mariadb-net
+      - email-relay-net
 
 networks:
   reverse-proxy-net:
